@@ -8,83 +8,83 @@
 #define HME_POS 1 
 #define BWL_POS (ROOM_WIDTH - 2)
 
-void print_status(int soup_count, int intimacy); // 1-2 »óÅÂ Ãâ·Â
-void handle_interaction(int* intimacy, char* name); // 1-3 »óÈ£ÀÛ¿ë
-void draw_room(int cat_pos, int prev_pos); // 1-4 ¹æ ±×¸®±â
-void auto_move_cat(int intimacy, int* cat_pos, int* prev_pos, char* name); // 1-5 ÀÌµ¿
-void check_soup(int cat_pos, int* soup_count, char* name); // 1-6 Çàµ¿ (¼öÇÁ)
+void print_status(int soup_count, int intimacy); // 1-2 ìƒíƒœ ì¶œë ¥
+void handle_interaction(int* intimacy, char* name); // 1-3 ìƒí˜¸ì‘ìš©
+void draw_room(int cat_pos, int prev_pos); // 1-4 ë°© ê·¸ë¦¬ê¸°
+void auto_move_cat(int intimacy, int* cat_pos, int* prev_pos, char* name); // 1-5 ì´ë™
+void check_soup(int cat_pos, int* soup_count, char* name); // 1-6 í–‰ë™ (ìˆ˜í”„)
 
 int main(void) {
-    // ·£´ı °ª ÃÊ±âÈ­ (½ÇÇàÇÒ ¶§¸¶´Ù ´Ù¸¥ ·£´ı°ª)
+    // ëœë¤ ê°’ ì´ˆê¸°í™” (ì‹¤í–‰í•  ë•Œë§ˆë‹¤ ë‹¤ë¥¸ ëœë¤ê°’)
     srand((unsigned int)time(NULL)); 
     int soup_count = 0;
     int intimacy = 2;
     int cat_pos = ROOM_WIDTH / 2;
     int prev_pos = cat_pos;
-    int keep_going = 1; // °ÔÀÓ ·çÇÁ °è¼ÓÇÒÁö °áÁ¤ÇÏ´Â ÇÃ·¡±×
+    int keep_going = 1; // ê²Œì„ ë£¨í”„ ê³„ì†í• ì§€ ê²°ì •í•˜ëŠ” í”Œë˜ê·¸
     char name[20];
 
-    // 1-1 ÀÎÆ®·Î&ÁØºñ (ascii art + ÀÌ¸§ ÀÔ·Â)
-    printf("****¾ß¿ËÀÌ¿Í ¼öÇÁ****\n\n");
+    // 1-1 ì¸íŠ¸ë¡œ&ì¤€ë¹„ (ascii art + ì´ë¦„ ì…ë ¥)
+    printf("****ì•¼ì˜¹ì´ì™€ ìˆ˜í”„****\n\n");
     printf(" /\\_/\\  \n");
     printf("( o.o ) \n");
     printf(" > ^ <  \n\n");
 
-    printf("¾ß¿ËÀÌÀÇ ÀÌ¸§À» Áö¾î ÁÖ¼¼¿ä: ");
+    printf("ì•¼ì˜¹ì´ì˜ ì´ë¦„ì„ ì§€ì–´ ì£¼ì„¸ìš”: ");
     scanf_s("%s", name, 20);
-    printf("¾ß¿ËÀÌÀÇ ÀÌ¸§Àº %sÀÔ´Ï´Ù.\n", name);
+    printf("ì•¼ì˜¹ì´ì˜ ì´ë¦„ì€ %sì…ë‹ˆë‹¤.\n", name);
     Sleep(1000);
     system("cls");
 
-    // °ÔÀÓ ¸ŞÀÎ ·çÇÁ ( 1-2 ~ 1-6 )
+    // ê²Œì„ ë©”ì¸ ë£¨í”„ ( 1-2 ~ 1-6 )
     while (keep_going) {
-        print_status(soup_count, intimacy); // 1-2 »óÅÂ Ãâ·Â
+        print_status(soup_count, intimacy); // 1-2 ìƒíƒœ ì¶œë ¥
         Sleep(500);
-        handle_interaction(&intimacy, name); // 1-3 »óÈ£ÀÛ¿ë
+        handle_interaction(&intimacy, name); // 1-3 ìƒí˜¸ì‘ìš©
         Sleep(500);
-        auto_move_cat(intimacy, &cat_pos, &prev_pos, name); // 1-5 ÀÌµ¿
+        auto_move_cat(intimacy, &cat_pos, &prev_pos, name); // 1-5 ì´ë™
         Sleep(500);
-        draw_room(cat_pos, prev_pos); // 1-4 ¹æ ±×¸®±â
+        draw_room(cat_pos, prev_pos); // 1-4 ë°© ê·¸ë¦¬ê¸°
         Sleep(500);
-        check_soup(cat_pos, &soup_count, name); // 1-6 Çàµ¿ (¼öÇÁ È®ÀÎ ¹× »ı¼º)
+        check_soup(cat_pos, &soup_count, name); // 1-6 í–‰ë™ (ìˆ˜í”„ í™•ì¸ ë° ìƒì„±)
         Sleep(2500); 
         system("cls");
     }
     return 0;
 }
 
-// 1-2 »óÅÂ Ãâ·Â
+// 1-2 ìƒíƒœ ì¶œë ¥
 void print_status(int soup_count, int intimacy) {
-    printf("==================== ÇöÀç »óÅÂ ===================\n");
-    printf("ÇöÀç±îÁö ¸¸µç ¼öÇÁ: %d°³\n", soup_count);
-    printf("Áı»ç¿ÍÀÇ °ü°è(0~4): %d\n", intimacy);
+    printf("==================== í˜„ì¬ ìƒíƒœ ===================\n");
+    printf("í˜„ì¬ê¹Œì§€ ë§Œë“  ìˆ˜í”„: %dê°œ\n", soup_count);
+    printf("ì§‘ì‚¬ì™€ì˜ ê´€ê³„(0~4): %d\n", intimacy);
 
     switch (intimacy) {
     case 0:
-        printf("°ç¿¡ ¿À´Â °ÍÁ¶Â÷ ½È¾îÇÕ´Ï´Ù.\n");
+        printf("ê³ì— ì˜¤ëŠ” ê²ƒì¡°ì°¨ ì‹«ì–´í•©ë‹ˆë‹¤.\n");
         break;
     case 1:
-        printf("°£½Ä ÀÚÆÇ±â Ãë±ŞÀÔ´Ï´Ù.\n");
+        printf("ê°„ì‹ ìíŒê¸° ì·¨ê¸‰ì…ë‹ˆë‹¤.\n");
         break;
     case 2:
-        printf("±×·°Àú·° ¾µ ¸¸ÇÑ Áı»çÀÔ´Ï´Ù.\n");
+        printf("ê·¸ëŸ­ì €ëŸ­ ì“¸ ë§Œí•œ ì§‘ì‚¬ì…ë‹ˆë‹¤.\n");
         break;
     case 3:
-        printf("ÈÇ¸¢ÇÑ Áı»ç·Î ÀÎÁ¤ ¹Ş°í ÀÖ½À´Ï´Ù.\n");
+        printf("í›Œë¥­í•œ ì§‘ì‚¬ë¡œ ì¸ì • ë°›ê³  ìˆìŠµë‹ˆë‹¤.\n");
         break;
     case 4:
-        printf("Áı»ç ²­µüÁöÀÔ´Ï´Ù.\n");
+        printf("ì§‘ì‚¬ ê»Œë”±ì§€ì…ë‹ˆë‹¤.\n");
         break;
     }
     printf("==================================================\n");
 }
 
-// 1-3 »óÈ£ÀÛ¿ë
+// 1-3 ìƒí˜¸ì‘ìš©
 void handle_interaction(int* intimacy, char* name) {
     int input;
     int dice;
 
-    printf("¾î¶² »óÈ£ÀÛ¿ëÀ» ÇÏ½Ã°Ú½À´Ï±î?   0. ¾Æ¹«°Íµµ ÇÏÁö ¾ÊÀ½  1. ±Ü¾î ÁÖ±â\n>> ");
+    printf("ì–´ë–¤ ìƒí˜¸ì‘ìš©ì„ í•˜ì‹œê² ìŠµë‹ˆê¹Œ?   0. ì•„ë¬´ê²ƒë„ í•˜ì§€ ì•ŠìŒ  1. ê¸ì–´ ì£¼ê¸°\n>> ");
 
     while (1) {
         if (scanf_s("%d", &input) != 1) {
@@ -104,40 +104,40 @@ void handle_interaction(int* intimacy, char* name) {
     dice = rand() % 6 + 1;
 
     if (input == 0) {
-        printf("¾Æ¹«°Íµµ ÇÏÁö ¾Ê½À´Ï´Ù.\n");
-        printf("4/6ÀÇ È®·ü·Î Ä£¹Ğµµ°¡ ¶³¾îÁı´Ï´Ù.\n");
-        printf("ÁÖ»çÀ§¸¦ ±¼¸³´Ï´Ù. ¶Ç¸£¸¤...\n");
-        printf("%dÀÌ(°¡) ³ª¿Ô½À´Ï´Ù!\n", dice);
+        printf("ì•„ë¬´ê²ƒë„ í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
+        printf("4/6ì˜ í™•ë¥ ë¡œ ì¹œë°€ë„ê°€ ë–¨ì–´ì§‘ë‹ˆë‹¤.\n");
+        printf("ì£¼ì‚¬ìœ„ë¥¼ êµ´ë¦½ë‹ˆë‹¤. ë˜ë¥´ë¥µ...\n");
+        printf("%dì´(ê°€) ë‚˜ì™”ìŠµë‹ˆë‹¤!\n", dice);
 
         if (dice <= 4) {
             if (*intimacy > 0) (*intimacy)--;
-            printf("Ä£¹Ğµµ°¡ ¶³¾îÁı´Ï´Ù.\n");
-            printf("ÇöÀç Ä£¹Ğµµ: %d\n", *intimacy);
+            printf("ì¹œë°€ë„ê°€ ë–¨ì–´ì§‘ë‹ˆë‹¤.\n");
+            printf("í˜„ì¬ ì¹œë°€ë„: %d\n", *intimacy);
         }
         else {
-            printf("´ÙÇàÈ÷ Ä£¹Ğµµ°¡ ¶³¾îÁöÁö ¾Ê¾Ò½À´Ï´Ù.\n");
-            printf("ÇöÀç Ä£¹Ğµµ: %d\n", *intimacy);
+            printf("ë‹¤í–‰íˆ ì¹œë°€ë„ê°€ ë–¨ì–´ì§€ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.\n");
+            printf("í˜„ì¬ ì¹œë°€ë„: %d\n", *intimacy);
         }
     }
     else if (input == 1) {
-        printf("%sÀÇ ÅÎÀ» ±Ü¾îÁÖ¾ú½À´Ï´Ù.\n", name);
-        printf("2/6ÀÇ È®·ü·Î Ä£¹Ğµµ°¡ ³ô¾ÆÁı´Ï´Ù.\n");
-        printf("ÁÖ»çÀ§¸¦ ±¼¸³´Ï´Ù. ¶Ç¸£¸¤...\n");
-        printf("%dÀÌ(°¡) ³ª¿Ô½À´Ï´Ù!\n", dice);
+        printf("%sì˜ í„±ì„ ê¸ì–´ì£¼ì—ˆìŠµë‹ˆë‹¤.\n", name);
+        printf("2/6ì˜ í™•ë¥ ë¡œ ì¹œë°€ë„ê°€ ë†’ì•„ì§‘ë‹ˆë‹¤.\n");
+        printf("ì£¼ì‚¬ìœ„ë¥¼ êµ´ë¦½ë‹ˆë‹¤. ë˜ë¥´ë¥µ...\n");
+        printf("%dì´(ê°€) ë‚˜ì™”ìŠµë‹ˆë‹¤!\n", dice);
         if (dice >= 5) {
             if (*intimacy < 4) (*intimacy)++;
-            printf("Ä£¹Ğµµ´Â ³ô¾ÆÁı´Ï´Ù.\n");
-            printf("ÇöÀç Ä£¹Ğµµ: %d\n", *intimacy);
+            printf("ì¹œë°€ë„ëŠ” ë†’ì•„ì§‘ë‹ˆë‹¤.\n");
+            printf("í˜„ì¬ ì¹œë°€ë„: %d\n", *intimacy);
 
         }
         else {
-            printf("Ä£¹Ğµµ´Â ±×´ë·ÎÀÔ´Ï´Ù.\n");
-            printf("ÇöÀç Ä£¹Ğµµ: %d\n", *intimacy);
+            printf("ì¹œë°€ë„ëŠ” ê·¸ëŒ€ë¡œì…ë‹ˆë‹¤.\n");
+            printf("í˜„ì¬ ì¹œë°€ë„: %d\n", *intimacy);
         }
     }
 }
 
-// 1-4 ¹æ ±×¸®±â
+// 1-4 ë°© ê·¸ë¦¬ê¸°
 void draw_room(int cat_pos, int prev_pos) {
     for (int i = 0; i < ROOM_WIDTH; i++) printf("#");
     printf("\n#");
@@ -167,58 +167,58 @@ void draw_room(int cat_pos, int prev_pos) {
     printf("\n");
 }
 
-// 1-5 ÀÌµ¿
+// 1-5 ì´ë™
 void auto_move_cat(int intimacy, int* cat_pos, int* prev_pos, char* name) {
     int dice = rand() % 6 + 1;
     int threshold = 6 - intimacy;
 
-    printf("%s ÀÌµ¿: Áı»ç¿Í Ä£¹ĞÇÒ¼ö·Ï ³¿ºñ ÂÊÀ¸·Î °¥ È®·üÀÌ ³ô¾ÆÁı´Ï´Ù.\n", name);
-    printf("ÁÖ»çÀ§ ´«ÀÌ %d ÀÌ»óÀÌ¸é ³¿ºñ ÂÊÀ¸·Î ÀÌµ¿ÇÕ´Ï´Ù.\n", threshold);
-    printf("ÁÖ»çÀ§¸¦ ±¼¸³´Ï´Ù. ¶Ç¸£¸¤...\n");
-    printf("%dÀÌ(°¡) ³ª¿Ô½À´Ï´Ù!\n", dice);
+    printf("%s ì´ë™: ì§‘ì‚¬ì™€ ì¹œë°€í• ìˆ˜ë¡ ëƒ„ë¹„ ìª½ìœ¼ë¡œ ê°ˆ í™•ë¥ ì´ ë†’ì•„ì§‘ë‹ˆë‹¤.\n", name);
+    printf("ì£¼ì‚¬ìœ„ ëˆˆì´ %d ì´ìƒì´ë©´ ëƒ„ë¹„ ìª½ìœ¼ë¡œ ì´ë™í•©ë‹ˆë‹¤.\n", threshold);
+    printf("ì£¼ì‚¬ìœ„ë¥¼ êµ´ë¦½ë‹ˆë‹¤. ë˜ë¥´ë¥µ...\n");
+    printf("%dì´(ê°€) ë‚˜ì™”ìŠµë‹ˆë‹¤!\n", dice);
 
     *prev_pos = *cat_pos;
     if (dice >= threshold) {
         if (*cat_pos < ROOM_WIDTH - 2) {
             (*cat_pos)++;
-            printf("³¿ºñ ÂÊÀ¸·Î ÇÑ Ä­ ÀÌµ¿ÇÕ´Ï´Ù.\n");
+            printf("ëƒ„ë¹„ ìª½ìœ¼ë¡œ í•œ ì¹¸ ì´ë™í•©ë‹ˆë‹¤.\n");
         }
         else {
-            printf("¿À¸¥ÂÊ º®¿¡ ¸·Çô ÀÌµ¿ÇÏÁö ¸øÇß½À´Ï´Ù.\n");
+            printf("ì˜¤ë¥¸ìª½ ë²½ì— ë§‰í˜€ ì´ë™í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.\n");
         }
     }
     else {
         if (*cat_pos > 1) {
             (*cat_pos)--;
-            printf("Áı ÂÊÀ¸·Î ÇÑ Ä­ ÀÌµ¿ÇÕ´Ï´Ù.\n");
+            printf("ì§‘ ìª½ìœ¼ë¡œ í•œ ì¹¸ ì´ë™í•©ë‹ˆë‹¤.\n");
         }
         else {
-            printf("¿ŞÂÊ º®¿¡ ¸·Çô ÀÌµ¿ÇÏÁö ¸øÇß½À´Ï´Ù.\n");
+            printf("ì™¼ìª½ ë²½ì— ë§‰í˜€ ì´ë™í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.\n");
         }
     }
 
     if (*cat_pos == HME_POS) {
-        printf("%sÀº(´Â) ÀÚ½ÅÀÇ Áı¿¡¼­ Æí¾ÈÇÔÀ» ´À³§´Ï´Ù.\n", name);
+        printf("%sì€(ëŠ”) ìì‹ ì˜ ì§‘ì—ì„œ í¸ì•ˆí•¨ì„ ëŠë‚ë‹ˆë‹¤.\n", name);
     }
 }
 
-// 1-6 Çàµ¿ (¼öÇÁ È®ÀÎ ¹× »ı¼º)
+// 1-6 í–‰ë™ (ìˆ˜í”„ í™•ì¸ ë° ìƒì„±)
 void check_soup(int cat_pos, int* soup_count, char* name) {
     if (cat_pos == ROOM_WIDTH - 2) {
         int type = rand() % 3;
         switch (type) {
         case 0:
-            printf("%s°¡ °¨ÀÚ ¼öÇÁ¸¦ ¸¸µé¾ú½À´Ï´Ù!\n", name);
+            printf("%sê°€ ê°ì ìˆ˜í”„ë¥¼ ë§Œë“¤ì—ˆìŠµë‹ˆë‹¤!\n", name);
             break;
         case 1:
-            printf("%s°¡ ¾ç¼ÛÀÌ ¼öÇÁ¸¦ ¸¸µé¾ú½À´Ï´Ù!\n", name);
+            printf("%sê°€ ì–‘ì†¡ì´ ìˆ˜í”„ë¥¼ ë§Œë“¤ì—ˆìŠµë‹ˆë‹¤!\n", name);
             break;
         case 2:
-            printf("%s°¡ ºê·ÎÄİ¸® ¼öÇÁ¸¦ ¸¸µé¾ú½À´Ï´Ù!\n", name);
+            printf("%sê°€ ë¸Œë¡œì½œë¦¬ ìˆ˜í”„ë¥¼ ë§Œë“¤ì—ˆìŠµë‹ˆë‹¤!\n", name);
             break;
         }
 
         (*soup_count)++;
-        printf("ÇöÀç±îÁö ¸¸µç ¼öÇÁ: %d°³\n", *soup_count);
+        printf("í˜„ì¬ê¹Œì§€ ë§Œë“  ìˆ˜í”„: %dê°œ\n", *soup_count);
     }
 }
