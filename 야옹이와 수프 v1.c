@@ -13,11 +13,11 @@ int intimacy = 2;
 int cat_pos = ROOM_WIDTH / 2;
 int prev_pos = ROOM_WIDTH / 2;
 
-void print_status(int soup_count, int intimacy); // 1-2 상태 출력
+void print_status(void); // 1-2 상태 출력
 void handle_interaction(void); // 1-3 상호작용
-void draw_room(int cat_pos, int prev_pos); // 1-4 방 그리기
-void auto_move_cat(int intimacy); // 1-5 이동
-void check_soup(int cat_pos); // 1-6 행동 (수프)
+void draw_room(void); // 1-4 방 그리기
+void auto_move_cat(void); // 1-5 이동
+void check_soup(void); // 1-6 행동 (수프)
 
 int main(void) {
     // 랜덤 값 초기화 (실행할 때마다 다른 랜덤값)
@@ -36,15 +36,15 @@ int main(void) {
 
     // 게임 메인 루프 ( 1-2 ~ 1-6 )
     while (keep_going) {
-        print_status(soup_count, intimacy); // 1-2 상태 출력
+        print_status(); // 1-2 상태 출력
         Sleep(500);
         handle_interaction(); // 1-3 상호작용
         Sleep(500);
-        auto_move_cat(intimacy); // 1-5 이동
+        auto_move_cat(); // 1-5 이동
         Sleep(500);
-        draw_room(cat_pos, prev_pos); // 1-4 방 그리기
+        draw_room(); // 1-4 방 그리기
         Sleep(500);
-        check_soup(cat_pos); // 1-6 행동 (수프 확인 및 생성)
+        check_soup(); // 1-6 행동 (수프 확인 및 생성)
         Sleep(2500); 
         system("cls");
     }
@@ -52,7 +52,7 @@ int main(void) {
 }
 
 // 1-2 상태 출력
-void print_status(int soup_count, int intimacy) {
+void print_status(void) {
     printf("==================== 현재 상태 ===================\n");
     printf("현재까지 만든 수프: %d개\n", soup_count);
     printf("집사와의 관계(0~4): %d\n", intimacy);
@@ -136,7 +136,7 @@ void handle_interaction(void) {
 }
 
 // 1-4 방 그리기
-void draw_room(int cat_pos, int prev_pos) {
+void draw_room(void) {
     for (int i = 0; i < ROOM_WIDTH; i++) printf("#");
     printf("\n#");
 
@@ -166,7 +166,7 @@ void draw_room(int cat_pos, int prev_pos) {
 }
 
 // 1-5 이동
-void auto_move_cat(int intimacy) {
+void auto_move_cat(void) {
     int dice = rand() % 6 + 1;
     int threshold = 6 - intimacy;
 
@@ -201,7 +201,7 @@ void auto_move_cat(int intimacy) {
 }
 
 // 1-6 행동 (수프 확인 및 생성)
-void check_soup(int cat_pos) {
+void check_soup(void) {
     if (cat_pos == ROOM_WIDTH - 2) {
         int type = rand() % 3;
         switch (type) {
