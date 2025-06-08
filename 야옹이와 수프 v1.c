@@ -20,6 +20,7 @@ void handle_interaction(void); // 1-3 상호작용
 void draw_room(void); // 1-4 방 그리기
 void auto_move_cat(void); // 1-5 이동
 void check_soup(void); // 1-6 행동 (수프)
+void feeling_bad(void); // 2-2 기분 나빠짐
 
 int main(void) {
     // 랜덤 값 초기화 (실행할 때마다 다른 랜덤값)
@@ -40,6 +41,8 @@ int main(void) {
     while (keep_going) {
         print_status(); // 1-2 상태 출력
         Sleep(500);
+        feeling_bad();
+        Sleep(500); // 2-2 기분 나빠짐
         handle_interaction(); // 1-3 상호작용
         Sleep(500);
         auto_move_cat(); // 1-5 이동
@@ -238,5 +241,22 @@ void check_soup(void) {
 
         soup_count++;
         printf("현재까지 만든 수프: %d개\n", soup_count);
+    }
+}
+
+void feeling_bad(void) {
+    int dice = rand() % 6 + 1; 
+    int threshold = 6 - intimacy;
+
+    printf("아무 이유 없이 기분이 나빠집니다. 고양이니까?\n");
+    printf("6-%d: 주사위 눈이 %d이하이면 그냥 기분이 나빠집니다.\n", intimacy, threshold);
+    printf("주사위를 굴립니다. 또르르...\n");
+    printf("%d이(가) 나왔습니다.\n", dice);
+
+    if (dice <= threshold && mood > 0) {
+        printf("쫀떡이의 기분이 나빠집니다: %d -> %d\n", mood, mood - 1);
+        mood--;
+    } else {
+        printf("쫀떡이의 기분은 그대로입니다: %d\n", mood);
     }
 }
