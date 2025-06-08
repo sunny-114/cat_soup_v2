@@ -14,10 +14,10 @@ int cat_pos = ROOM_WIDTH / 2;
 int prev_pos = ROOM_WIDTH / 2;
 
 void print_status(int soup_count, int intimacy); // 1-2 상태 출력
-void handle_interaction(char* name); // 1-3 상호작용
+void handle_interaction(char name[20]); // 1-3 상호작용
 void draw_room(int cat_pos, int prev_pos); // 1-4 방 그리기
-void auto_move_cat(int intimacy, char* name); // 1-5 이동
-void check_soup(int cat_pos, char* name); // 1-6 행동 (수프)
+void auto_move_cat(int intimacy, char name[20]); // 1-5 이동
+void check_soup(int cat_pos, char name[20]); // 1-6 행동 (수프)
 
 int main(void) {
     // 랜덤 값 초기화 (실행할 때마다 다른 랜덤값)
@@ -81,7 +81,7 @@ void print_status(int soup_count, int intimacy) {
 }
 
 // 1-3 상호작용
-void handle_interaction(char* name) {
+void handle_interaction(char name[20]) {
     int input;
     int dice;
 
@@ -169,7 +169,7 @@ void draw_room(int cat_pos, int prev_pos) {
 }
 
 // 1-5 이동
-void auto_move_cat(int intimacy, char* name) {
+void auto_move_cat(int intimacy, char name[20]) {
     int dice = rand() % 6 + 1;
     int threshold = 6 - intimacy;
 
@@ -204,7 +204,7 @@ void auto_move_cat(int intimacy, char* name) {
 }
 
 // 1-6 행동 (수프 확인 및 생성)
-void check_soup(int cat_pos, char* name) {
+void check_soup(int cat_pos, char name[20]) {
     if (cat_pos == ROOM_WIDTH - 2) {
         int type = rand() % 3;
         switch (type) {
