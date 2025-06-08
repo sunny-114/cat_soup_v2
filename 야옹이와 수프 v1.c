@@ -14,16 +14,15 @@ int cat_pos = ROOM_WIDTH / 2;
 int prev_pos = ROOM_WIDTH / 2;
 
 void print_status(int soup_count, int intimacy); // 1-2 상태 출력
-void handle_interaction(char name[20]); // 1-3 상호작용
+void handle_interaction(void); // 1-3 상호작용
 void draw_room(int cat_pos, int prev_pos); // 1-4 방 그리기
-void auto_move_cat(int intimacy, char name[20]); // 1-5 이동
-void check_soup(int cat_pos, char name[20]); // 1-6 행동 (수프)
+void auto_move_cat(int intimacy); // 1-5 이동
+void check_soup(int cat_pos); // 1-6 행동 (수프)
 
 int main(void) {
     // 랜덤 값 초기화 (실행할 때마다 다른 랜덤값)
     srand((unsigned int)time(NULL)); 
     int keep_going = 1; // 게임 루프 계속할지 결정하는 플래그
-    char name[20];
 
     // 1-1 인트로&준비 (ascii art + 이름 입력)
     printf("****야옹이와 수프****\n\n");
@@ -31,9 +30,7 @@ int main(void) {
     printf("( o.o ) \n");
     printf(" > ^ <  \n\n");
 
-    printf("야옹이의 이름을 지어 주세요: ");
-    scanf_s("%s", name, 20);
-    printf("야옹이의 이름은 %s입니다.\n", name);
+    printf("쫀떡이가 식빵을 굽고 있습니다.");
     Sleep(1000);
     system("cls");
 
@@ -41,13 +38,13 @@ int main(void) {
     while (keep_going) {
         print_status(soup_count, intimacy); // 1-2 상태 출력
         Sleep(500);
-        handle_interaction(name); // 1-3 상호작용
+        handle_interaction(); // 1-3 상호작용
         Sleep(500);
-        auto_move_cat(intimacy, name); // 1-5 이동
+        auto_move_cat(intimacy); // 1-5 이동
         Sleep(500);
         draw_room(cat_pos, prev_pos); // 1-4 방 그리기
         Sleep(500);
-        check_soup(cat_pos, name); // 1-6 행동 (수프 확인 및 생성)
+        check_soup(cat_pos); // 1-6 행동 (수프 확인 및 생성)
         Sleep(2500); 
         system("cls");
     }
@@ -81,7 +78,7 @@ void print_status(int soup_count, int intimacy) {
 }
 
 // 1-3 상호작용
-void handle_interaction(char name[20]) {
+void handle_interaction(void) {
     int input;
     int dice;
 
@@ -121,7 +118,7 @@ void handle_interaction(char name[20]) {
         }
     }
     else if (input == 1) {
-        printf("%s의 턱을 긁어주었습니다.\n", name);
+        printf("쫀떡이의 턱을 긁어주었습니다.\n");
         printf("2/6의 확률로 친밀도가 높아집니다.\n");
         printf("주사위를 굴립니다. 또르륵...\n");
         printf("%d이(가) 나왔습니다!\n", dice);
@@ -169,11 +166,11 @@ void draw_room(int cat_pos, int prev_pos) {
 }
 
 // 1-5 이동
-void auto_move_cat(int intimacy, char name[20]) {
+void auto_move_cat(int intimacy) {
     int dice = rand() % 6 + 1;
     int threshold = 6 - intimacy;
 
-    printf("%s 이동: 집사와 친밀할수록 냄비 쪽으로 갈 확률이 높아집니다.\n", name);
+    printf("쫀떡 이동: 집사와 친밀할수록 냄비 쪽으로 갈 확률이 높아집니다.\n");
     printf("주사위 눈이 %d 이상이면 냄비 쪽으로 이동합니다.\n", threshold);
     printf("주사위를 굴립니다. 또르륵...\n");
     printf("%d이(가) 나왔습니다!\n", dice);
@@ -199,23 +196,23 @@ void auto_move_cat(int intimacy, char name[20]) {
     }
 
     if (cat_pos == HME_POS) {
-        printf("%s은(는) 자신의 집에서 편안함을 느낍니다.\n", name);
+        printf("쫀떡이는 자신의 집에서 편안함을 느낍니다.\n");
     }
 }
 
 // 1-6 행동 (수프 확인 및 생성)
-void check_soup(int cat_pos, char name[20]) {
+void check_soup(int cat_pos) {
     if (cat_pos == ROOM_WIDTH - 2) {
         int type = rand() % 3;
         switch (type) {
         case 0:
-            printf("%s가 감자 수프를 만들었습니다!\n", name);
+            printf("쫀떡이가 감자 수프를 만들었습니다!\n");
             break;
         case 1:
-            printf("%s가 양송이 수프를 만들었습니다!\n", name);
+            printf("쫀떡이가 양송이 수프를 만들었습니다!\n");
             break;
         case 2:
-            printf("%s가 브로콜리 수프를 만들었습니다!\n", name);
+            printf("쫀떡이가 브로콜리 수프를 만들었습니다!\n");
             break;
         }
 
