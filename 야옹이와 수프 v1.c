@@ -12,6 +12,8 @@ int soup_count = 0;
 int intimacy = 2;
 int cat_pos = ROOM_WIDTH / 2;
 int prev_pos = ROOM_WIDTH / 2;
+int CP = 0;
+int mood = 3;
 
 void print_status(void); // 1-2 상태 출력
 void handle_interaction(void); // 1-3 상호작용
@@ -55,6 +57,24 @@ int main(void) {
 void print_status(void) {
     printf("==================== 현재 상태 ===================\n");
     printf("현재까지 만든 수프: %d개\n", soup_count);
+    printf("CP: %d포인트\n", CP);
+    printf("쫀떡이 기분(0~3): %d\n", mood);
+
+    switch (mood) {
+    case 0:
+        printf("기분이 매우 나쁩니다.\n");
+        break;
+    case 1:
+        printf("심심해합니다.\n");
+        break;
+    case 2:
+        printf("식빵을 굽습니다.\n");
+        break;
+    case 3:
+        printf("골골송을 부릅니다.\n");
+        break;
+    }
+
     printf("집사와의 관계(0~4): %d\n", intimacy);
 
     switch (intimacy) {
