@@ -8,19 +8,20 @@
 #define HME_POS 1 
 #define BWL_POS (ROOM_WIDTH - 2)
 
+int soup_count = 0;
+int intimacy = 2;
+int cat_pos = ROOM_WIDTH / 2;
+int prev_pos = ROOM_WIDTH / 2;
+
 void print_status(int soup_count, int intimacy); // 1-2 상태 출력
-void handle_interaction(int* intimacy, char* name); // 1-3 상호작용
+void handle_interaction(char* name); // 1-3 상호작용
 void draw_room(int cat_pos, int prev_pos); // 1-4 방 그리기
-void auto_move_cat(int intimacy, int* cat_pos, int* prev_pos, char* name); // 1-5 이동
-void check_soup(int cat_pos, int* soup_count, char* name); // 1-6 행동 (수프)
+void auto_move_cat(int intimacy, char* name); // 1-5 이동
+void check_soup(int cat_pos, char* name); // 1-6 행동 (수프)
 
 int main(void) {
     // 랜덤 값 초기화 (실행할 때마다 다른 랜덤값)
     srand((unsigned int)time(NULL)); 
-    int soup_count = 0;
-    int intimacy = 2;
-    int cat_pos = ROOM_WIDTH / 2;
-    int prev_pos = cat_pos;
     int keep_going = 1; // 게임 루프 계속할지 결정하는 플래그
     char name[20];
 
@@ -40,13 +41,13 @@ int main(void) {
     while (keep_going) {
         print_status(soup_count, intimacy); // 1-2 상태 출력
         Sleep(500);
-        handle_interaction(&intimacy, name); // 1-3 상호작용
+        handle_interaction(name); // 1-3 상호작용
         Sleep(500);
-        auto_move_cat(intimacy, &cat_pos, &prev_pos, name); // 1-5 이동
+        auto_move_cat(intimacy, name); // 1-5 이동
         Sleep(500);
         draw_room(cat_pos, prev_pos); // 1-4 방 그리기
         Sleep(500);
-        check_soup(cat_pos, &soup_count, name); // 1-6 행동 (수프 확인 및 생성)
+        check_soup(cat_pos, name); // 1-6 행동 (수프 확인 및 생성)
         Sleep(2500); 
         system("cls");
     }
@@ -80,7 +81,7 @@ void print_status(int soup_count, int intimacy) {
 }
 
 // 1-3 상호작용
-void handle_interaction(int* intimacy, char* name) {
+void handle_interaction(char* name) {
     int input;
     int dice;
 
@@ -110,13 +111,13 @@ void handle_interaction(int* intimacy, char* name) {
         printf("%d이(가) 나왔습니다!\n", dice);
 
         if (dice <= 4) {
-            if (*intimacy > 0) (*intimacy)--;
+            if (intimacy > 0) intimacy--;
             printf("친밀도가 떨어집니다.\n");
-            printf("현재 친밀도: %d\n", *intimacy);
+            printf("현재 친밀도: %d\n", intimacy);
         }
         else {
             printf("다행히 친밀도가 떨어지지 않았습니다.\n");
-            printf("현재 친밀도: %d\n", *intimacy);
+            printf("현재 친밀도: %d\n", intimacy);
         }
     }
     else if (input == 1) {
@@ -125,14 +126,14 @@ void handle_interaction(int* intimacy, char* name) {
         printf("주사위를 굴립니다. 또르륵...\n");
         printf("%d이(가) 나왔습니다!\n", dice);
         if (dice >= 5) {
-            if (*intimacy < 4) (*intimacy)++;
+            if (intimacy < 4) intimacy++;
             printf("친밀도는 높아집니다.\n");
-            printf("현재 친밀도: %d\n", *intimacy);
+            printf("현재 친밀도: %d\n", intimacy);
 
         }
         else {
             printf("친밀도는 그대로입니다.\n");
-            printf("현재 친밀도: %d\n", *intimacy);
+            printf("현재 친밀도: %d\n", intimacy);
         }
     }
 }
@@ -168,7 +169,7 @@ void draw_room(int cat_pos, int prev_pos) {
 }
 
 // 1-5 이동
-void auto_move_cat(int intimacy, int* cat_pos, int* prev_pos, char* name) {
+void auto_move_cat(int intimacy, char* name) {
     int dice = rand() % 6 + 1;
     int threshold = 6 - intimacy;
 
@@ -177,10 +178,10 @@ void auto_move_cat(int intimacy, int* cat_pos, int* prev_pos, char* name) {
     printf("주사위를 굴립니다. 또르륵...\n");
     printf("%d이(가) 나왔습니다!\n", dice);
 
-    *prev_pos = *cat_pos;
+    prev_pos = cat_pos;
     if (dice >= threshold) {
-        if (*cat_pos < ROOM_WIDTH - 2) {
-            (*cat_pos)++;
+        if (cat_pos < ROOM_WIDTH - 2) {
+            cat_pos++;
             printf("냄비 쪽으로 한 칸 이동합니다.\n");
         }
         else {
@@ -188,8 +189,8 @@ void auto_move_cat(int intimacy, int* cat_pos, int* prev_pos, char* name) {
         }
     }
     else {
-        if (*cat_pos > 1) {
-            (*cat_pos)--;
+        if (cat_pos > 1) {
+            cat_pos--;
             printf("집 쪽으로 한 칸 이동합니다.\n");
         }
         else {
@@ -197,13 +198,13 @@ void auto_move_cat(int intimacy, int* cat_pos, int* prev_pos, char* name) {
         }
     }
 
-    if (*cat_pos == HME_POS) {
+    if (cat_pos == HME_POS) {
         printf("%s은(는) 자신의 집에서 편안함을 느낍니다.\n", name);
     }
 }
 
 // 1-6 행동 (수프 확인 및 생성)
-void check_soup(int cat_pos, int* soup_count, char* name) {
+void check_soup(int cat_pos, char* name) {
     if (cat_pos == ROOM_WIDTH - 2) {
         int type = rand() % 3;
         switch (type) {
@@ -218,7 +219,7 @@ void check_soup(int cat_pos, int* soup_count, char* name) {
             break;
         }
 
-        (*soup_count)++;
-        printf("현재까지 만든 수프: %d개\n", *soup_count);
+        soup_count++;
+        printf("현재까지 만든 수프: %d개\n", soup_count);
     }
 }
