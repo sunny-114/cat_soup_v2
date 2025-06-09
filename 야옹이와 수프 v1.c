@@ -12,15 +12,23 @@ int soup_count = 0;
 int intimacy = 2;
 int cat_pos = ROOM_WIDTH / 2;
 int prev_pos = ROOM_WIDTH / 2;
+
 int CP = 0;
 int mood = 3;
+int resting_home = 0;
+
+int has_scratcher = 0;
+int has_cattower = 0;
+
+int SCR_POS = -1;
+int CAT_POS = -1;
 
 void print_status(void); // 1-2 상태 출력
 void handle_interaction(void); // 1-3 상호작용
 void draw_room(void); // 1-4 방 그리기
-void check_soup(void); // 1-6 행동 (수프)
 void feeling_bad(void); // 2-2 기분 나빠짐
-void mood_move(void); // 2-3 이동동
+void mood_move(void); // 2-3 이동
+void check_behavior(void); // 2-4 행동
 
 int main(void) {
     // 랜덤 값 초기화 (실행할 때마다 다른 랜덤값)
@@ -45,13 +53,13 @@ int main(void) {
         Sleep(500); // 2-2 기분 나빠짐
         mood_move(); 
         Sleep(500); // 2-3 이동
+        check_behavior(); // 2-4 행동
+        Sleep(500);
         handle_interaction(); // 1-3 상호작용
         Sleep(500);
         auto_move_cat(); // 1-5 이동
         Sleep(500);
         draw_room(); // 1-4 방 그리기
-        Sleep(500);
-        check_soup(); // 1-6 행동 (수프 확인 및 생성)
         Sleep(2500); 
         system("cls");
     }
@@ -191,27 +199,6 @@ void draw_room(void) {
 }
 
 
-// 1-6 행동 (수프 확인 및 생성)
-void check_soup(void) {
-    if (cat_pos == ROOM_WIDTH - 2) {
-        int type = rand() % 3;
-        switch (type) {
-        case 0:
-            printf("쫀떡이가 감자 수프를 만들었습니다!\n");
-            break;
-        case 1:
-            printf("쫀떡이가 양송이 수프를 만들었습니다!\n");
-            break;
-        case 2:
-            printf("쫀떡이가 브로콜리 수프를 만들었습니다!\n");
-            break;
-        }
-
-        soup_count++;
-        printf("현재까지 만든 수프: %d개\n", soup_count);
-    }
-}
-
 void feeling_bad(void) {
     int dice = rand() % 6 + 1; 
     int threshold = 6 - intimacy;
@@ -246,4 +233,35 @@ void mood_move(void) {
         break;
     }
 
+}
+
+void check_behavior(void) {
+    if (cat_pos == HME_POS) {
+        if(resting_home == 0) {
+            mood++;
+            if (mood > 3) mood = 3;
+            printf("쫀떡이는 집에서 편안하게 쉽니다. 기분이 좋아졌습니다.: %d\n", mood);
+            resting_home = 1;
+        }
+    } else {
+        resting_home = 0;
+    }
+
+    if (cat_pos == ROOM_WIDTH - 2) {
+        int type = rand() % 3;
+        switch (type) {
+        case 0:
+            printf("쫀떡이가 감자 수프를 만들었습니다!\n");
+            break;
+        case 1:
+            printf("쫀떡이가 양송이 수프를 만들었습니다!\n");
+            break;
+        case 2:
+            printf("쫀떡이가 브로콜리 수프를 만들었습니다!\n");
+            break;
+        }
+
+        soup_count++;
+        printf("현재까지 만든 수프: %d개\n", soup_count);
+    }
 }
