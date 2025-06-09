@@ -221,6 +221,8 @@ void mood_move(void) {
     switch (mood) {
     case 0:
         printf("기분이 매우 나쁜 쫀떡이는 집으로 향합니다.\n");
+        if (cat_pos > HME_POS) cat_pos--;
+        else if (cat_pos < HME_POS) cat_pos++;
         break;
     case 1:
         printf("쫀떡이는 심심해서 스크래처 쪽으로 이동합니다.\n");
@@ -230,6 +232,8 @@ void mood_move(void) {
         break;
     case 3:
         printf("쫀떡이는 골골송을 부르며 수프를 만들러 갑니다.\n");
+        if (cat_pos > BWL_POS) cat_pos--;
+        else if (cat_pos < BWL_POS) cat_pos++;
         break;
     }
 
