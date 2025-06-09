@@ -18,9 +18,9 @@ int mood = 3;
 void print_status(void); // 1-2 상태 출력
 void handle_interaction(void); // 1-3 상호작용
 void draw_room(void); // 1-4 방 그리기
-void auto_move_cat(void); // 1-5 이동
 void check_soup(void); // 1-6 행동 (수프)
 void feeling_bad(void); // 2-2 기분 나빠짐
+void mood_move(void); // 2-3 이동동
 
 int main(void) {
     // 랜덤 값 초기화 (실행할 때마다 다른 랜덤값)
@@ -43,6 +43,8 @@ int main(void) {
         Sleep(500);
         feeling_bad();
         Sleep(500); // 2-2 기분 나빠짐
+        mood_move(); 
+        Sleep(500); // 2-3 이동
         handle_interaction(); // 1-3 상호작용
         Sleep(500);
         auto_move_cat(); // 1-5 이동
@@ -188,40 +190,6 @@ void draw_room(void) {
     printf("\n");
 }
 
-// 1-5 이동
-void auto_move_cat(void) {
-    int dice = rand() % 6 + 1;
-    int threshold = 6 - intimacy;
-
-    printf("쫀떡 이동: 집사와 친밀할수록 냄비 쪽으로 갈 확률이 높아집니다.\n");
-    printf("주사위 눈이 %d 이상이면 냄비 쪽으로 이동합니다.\n", threshold);
-    printf("주사위를 굴립니다. 또르륵...\n");
-    printf("%d이(가) 나왔습니다!\n", dice);
-
-    prev_pos = cat_pos;
-    if (dice >= threshold) {
-        if (cat_pos < ROOM_WIDTH - 2) {
-            cat_pos++;
-            printf("냄비 쪽으로 한 칸 이동합니다.\n");
-        }
-        else {
-            printf("오른쪽 벽에 막혀 이동하지 못했습니다.\n");
-        }
-    }
-    else {
-        if (cat_pos > 1) {
-            cat_pos--;
-            printf("집 쪽으로 한 칸 이동합니다.\n");
-        }
-        else {
-            printf("왼쪽 벽에 막혀 이동하지 못했습니다.\n");
-        }
-    }
-
-    if (cat_pos == HME_POS) {
-        printf("쫀떡이는 자신의 집에서 편안함을 느낍니다.\n");
-    }
-}
 
 // 1-6 행동 (수프 확인 및 생성)
 void check_soup(void) {
@@ -259,4 +227,23 @@ void feeling_bad(void) {
     } else {
         printf("쫀떡이의 기분은 그대로입니다: %d\n", mood);
     }
+}
+
+void mood_move(void) {
+    
+    switch (mood) {
+    case 0:
+        printf("기분이 매우 나쁜 쫀떡이는 집으로 향합니다.\n");
+        break;
+    case 1:
+        printf("쫀떡이는 심심해서 스크래처 쪽으로 이동합니다.\n");
+        break;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+    case 2:
+        printf("쫀떡이는 기분좋게 식빵을 굽고 있습니다.\n");
+        break;
+    case 3:
+        printf("쫀떡이는 골골송을 부르며 수프를 만들러 갑니다.\n");
+        break;
+    }
+
 }
