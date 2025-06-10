@@ -29,6 +29,7 @@ void draw_room(void); // 1-4 방 그리기
 void feeling_bad(void); // 2-2 기분 나빠짐
 void mood_move(void); // 2-3 이동
 void check_behavior(void); // 2-4 행동
+void product_CP(void); // 2-7 CP 생산
 
 int main(void) {
     // 랜덤 값 초기화 (실행할 때마다 다른 랜덤값)
@@ -60,6 +61,8 @@ int main(void) {
         auto_move_cat(); // 1-5 이동
         Sleep(500);
         draw_room(); // 1-4 방 그리기
+        Sleep(500);
+        product_CP(); // 2-7 CP생산
         Sleep(2500); 
         system("cls");
     }
@@ -268,4 +271,16 @@ void check_behavior(void) {
         soup_count++;
         printf("현재까지 만든 수프: %d개\n", soup_count);
     }
+}
+
+void product_CP(void) {
+    int get_CP = (mood - 1 >= 0 ? mood -1 : 0) + intimacy;
+
+    CP += get_CP;
+
+    printf("쫀떡의 기분(0~3): %d\n", mood);
+    printf("집사와의 친밀도(0~4): %d\n", intimacy);
+    printf("쫀떡의 기분과 친밀도에 따라서 CP가 %d 포인트 생산되었습니다.\n", get_CP);
+    printf("보유 CP: %d 포인트\n", CP);
+     
 }
