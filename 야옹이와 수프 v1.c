@@ -19,9 +19,10 @@ int resting_home = 0;
 
 int has_scratcher = 0;
 int has_cattower = 0;
+int has_mouse_toy = 0;
+int has_laser_pointer = 0;
 
-int SCR_POS = -1;
-int CAT_POS = -1;
+int SCR_POS, CAT_POS;
 
 void print_status(void); // 1-2 상태 출력
 void handle_interaction(void); // 1-3 상호작용
@@ -30,6 +31,7 @@ void feeling_bad(void); // 2-2 기분 나빠짐
 void mood_move(void); // 2-3 이동
 void check_behavior(void); // 2-4 행동
 void product_CP(void); // 2-7 CP 생산
+void shop_buy (void); // 2-8 상점
 
 int main(void) {
     // 랜덤 값 초기화 (실행할 때마다 다른 랜덤값)
@@ -58,11 +60,11 @@ int main(void) {
         Sleep(500);
         handle_interaction(); // 1-3 상호작용
         Sleep(500);
-        auto_move_cat(); // 1-5 이동
-        Sleep(500);
         draw_room(); // 1-4 방 그리기
         Sleep(500);
         product_CP(); // 2-7 CP생산
+        Sleep(500);
+        shop_buy(); // 2-8 상점점
         Sleep(2500); 
         system("cls");
     }
@@ -283,4 +285,95 @@ void product_CP(void) {
     printf("쫀떡의 기분과 친밀도에 따라서 CP가 %d 포인트 생산되었습니다.\n", get_CP);
     printf("보유 CP: %d 포인트\n", CP);
      
+}
+
+void shop_buy(void) {
+    int choice;
+
+    while (1) {
+        printf("상점에서 물건을 살 수 있습니다.\n");
+        printf("어떤 물건을 구매할까요?\n");
+        printf("0. 아무 것도 사지 않는다.\n");
+        printf("1. 장난감 쥐: 1 CP\n");
+        printf("2. 레이저 포인터: 2 CP\n");
+        printf("3. 스크래처: 4 CP\n");
+        printf("4. 캣 타워: 6 CP\n");
+        printf(">> ");
+        scanf_s("%d", &choice);
+
+        if (choice < 0 || choice > 4) {
+            continue;
+        }
+
+        if (choice == 0) {
+            break;
+        }
+
+        switch (choice) {
+            case 1:
+                if (has_mouse_toy) {
+                    printf("장난감 쥐를 이미 구매했습니다.\n");
+                    break;
+                }
+                if (CP < 1) {
+                    printf("CP가 부족합니다.\n");
+                    break;
+                }
+                CP -= 1;
+                has_mouse_toy = 1;
+                printf("장난감 쥐를 구매했습니다. 보유 CP: %d 포인트\n", CP);
+                break;
+            
+            case 2:
+                if (has_laser_pointer) {
+                    printf("레이저 포인터를 이미 구매했습니다.\n");
+                    break;
+                }
+                if (CP <2) {
+                    printf("CP가 부족합니다.\n");
+                    break;
+                }
+                CP -= 2;
+                has_laser_pointer = 1;
+                printf("레이저 포인터를 구매했습니다. 보유 CP: %d 포인트\n", CP);
+                break;
+
+            case 3:
+                if (has_scratcher) {
+                    printf("ㅅ크래처를 이미 구매했습니다.\n");
+                    break;
+                }
+                if (CP <4) {
+                    printf("CP가 부족합니다.\n");
+                    break;
+                }
+                CP -= 4;
+                has_scratcher = 1;
+                printf("스크래처를 구매했습니다. 보유 CP: %d 포인트\n", CP);
+
+                do {
+                    SCR_POS = rand() % ROOM_WIDTH;
+                } while (SCR_POS == HME_POS || SCR_POS == BWL_POS || SCR_POS == CAT_POS);
+                break;
+
+            case 4:
+                if (has_cattower){
+                    printf("캣 타워를 이미 구매했습니다.\n");
+                    break;
+                }
+                if (CP < 6) {
+                    printf("CP가 부족합니다.\n");
+                    break;
+                }
+                CP -= 6;
+                has_cattower = 1;
+                printf("캣 타워를 구매했습니다. 보유 CP: %d 포인트\n", CP);
+
+                do {
+                    CAT_POS = rand() % ROOM_WIDTH;
+                } while (CAT_POS == HME_POS || CAT_POS == BWL_POS || CAT_POS == SCR_POS);
+                break;
+        }
+
+    }
 }
