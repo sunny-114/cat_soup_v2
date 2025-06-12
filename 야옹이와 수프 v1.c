@@ -177,11 +177,14 @@ void handle_interaction(void) {
 // 1-4 방 그리기
 void draw_room(void) {
     for (int i = 0; i < ROOM_WIDTH; i++) printf("#");
-    printf("\n#");
+
+        printf("\n#");
 
     for (int i = 1; i < ROOM_WIDTH - 1; i++) {
         if (i == HME_POS) printf("H");
         else if (i == BWL_POS) printf("B");
+        else if (i == SCR_POS && has_scratcher) printf("S"); 
+        else if (i == CAT_POS && has_scratcher) printf("T"); 
         else printf(" ");
     }
 
