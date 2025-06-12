@@ -22,7 +22,8 @@ int has_cattower = 0;
 int has_mouse_toy = 0;
 int has_laser_pointer = 0;
 
-int SCR_POS, CAT_POS;
+int SCR_POS = -1;
+int CAT_POS = -1;
 
 void print_status(void); // 1-2 상태 출력
 void handle_interaction(void); // 1-3 상호작용
@@ -294,10 +295,10 @@ void shop_buy(void) {
         printf("상점에서 물건을 살 수 있습니다.\n");
         printf("어떤 물건을 구매할까요?\n");
         printf("0. 아무 것도 사지 않는다.\n");
-        printf("1. 장난감 쥐: 1 CP\n");
-        printf("2. 레이저 포인터: 2 CP\n");
-        printf("3. 스크래처: 4 CP\n");
-        printf("4. 캣 타워: 6 CP\n");
+        printf("1. 장난감 쥐: 1 CP %s\n", has_mouse_toy ? "(품절)" : "");
+        printf("2. 레이저 포인터: 2 CP %s\n", has_laser_pointer ? "(품절)" : "");
+        printf("3. 스크래처: 4 CP %s\n", has_scratcher ? "(품절)" : "");
+        printf("4. 캣 타워: 6 CP %s\n", has_cattower ? "(품절)" : "");
         printf(">> ");
         scanf_s("%d", &choice);
 
@@ -306,74 +307,66 @@ void shop_buy(void) {
         }
 
         if (choice == 0) {
-            break;
+            return;
         }
 
         switch (choice) {
             case 1:
                 if (has_mouse_toy) {
                     printf("장난감 쥐를 이미 구매했습니다.\n");
-                    break;
-                }
-                if (CP < 1) {
+                } else if (CP < 1) {
                     printf("CP가 부족합니다.\n");
-                    break;
+                } else {
+                    CP -= 1;
+                    has_mouse_toy = 1;
+                    printf("장난감 쥐를 구매했습니다. 보유 CP: %d 포인트\n", CP);
                 }
-                CP -= 1;
-                has_mouse_toy = 1;
-                printf("장난감 쥐를 구매했습니다. 보유 CP: %d 포인트\n", CP);
-                break;
+                return;
             
             case 2:
                 if (has_laser_pointer) {
                     printf("레이저 포인터를 이미 구매했습니다.\n");
-                    break;
-                }
-                if (CP <2) {
+                } else if (CP <2) {
                     printf("CP가 부족합니다.\n");
-                    break;
-                }
+                } else {
                 CP -= 2;
                 has_laser_pointer = 1;
                 printf("레이저 포인터를 구매했습니다. 보유 CP: %d 포인트\n", CP);
-                break;
+                }
+                return;
 
             case 3:
                 if (has_scratcher) {
-                    printf("ㅅ크래처를 이미 구매했습니다.\n");
-                    break;
-                }
-                if (CP <4) {
+                    printf("스크래처를 이미 구매했습니다.\n");
+                } else if (CP <4) {
                     printf("CP가 부족합니다.\n");
-                    break;
-                }
+                } else {
                 CP -= 4;
                 has_scratcher = 1;
                 printf("스크래처를 구매했습니다. 보유 CP: %d 포인트\n", CP);
 
-                do {
-                    SCR_POS = rand() % ROOM_WIDTH;
-                } while (SCR_POS == HME_POS || SCR_POS == BWL_POS || SCR_POS == CAT_POS);
-                break;
+                    do {
+                        SCR_POS = rand() % ROOM_WIDTH;
+                    } while (SCR_POS == HME_POS || SCR_POS == BWL_POS || SCR_POS == CAT_POS);
+                }
+                return;
 
             case 4:
                 if (has_cattower){
                     printf("캣 타워를 이미 구매했습니다.\n");
-                    break;
-                }
-                if (CP < 6) {
+                } else if (CP < 6) {
                     printf("CP가 부족합니다.\n");
-                    break;
-                }
+                } else {
                 CP -= 6;
                 has_cattower = 1;
                 printf("캣 타워를 구매했습니다. 보유 CP: %d 포인트\n", CP);
 
-                do {
-                    CAT_POS = rand() % ROOM_WIDTH;
-                } while (CAT_POS == HME_POS || CAT_POS == BWL_POS || CAT_POS == SCR_POS);
-                break;
+                    do {
+                        CAT_POS = rand() % ROOM_WIDTH;
+                    } while (CAT_POS == HME_POS || CAT_POS == BWL_POS || CAT_POS == SCR_POS);
+                }
+                return;
         }
 
-    }
+    } 
 }
