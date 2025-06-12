@@ -184,7 +184,7 @@ void draw_room(void) {
         if (i == HME_POS) printf("H");
         else if (i == BWL_POS) printf("B");
         else if (i == SCR_POS && has_scratcher) printf("S"); 
-        else if (i == CAT_POS && has_scratcher) printf("T"); 
+        else if (i == CAT_POS && has_cattower) printf("T"); 
         else printf(" ");
     }
 
