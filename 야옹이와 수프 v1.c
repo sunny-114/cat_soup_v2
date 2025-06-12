@@ -226,6 +226,7 @@ void feeling_bad(void) {
 }
 
 void mood_move(void) {
+    prev_pos = cat_pos;
     
     switch (mood) {
     case 0:
@@ -234,8 +235,25 @@ void mood_move(void) {
         else if (cat_pos < HME_POS) cat_pos++;
         break;
     case 1:
-        printf("쫀떡이는 심심해서 스크래처 쪽으로 이동합니다.\n");
-        break;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+        if (!has_scratcher && !has_cattower) {
+            printf("놀 거리가 없어서 기분이 매우 나빠집니다.\n");
+            if (mood > 0) mood--;
+            break;
+        }
+        
+        int dist_scratcher = has_scratcher ? abs(cat_pos - SCR_POS) : 999;
+        int dist_cattower = has_cattower ? abs(cat_pos - CAT_POS) : 999;
+
+        if (dist_scratcher <= dist_cattower) {
+            printf("쫀떡이는 심심해서 스크래처 쪽으로 이동합니다.\n");
+            if (cat_pos > SCR_POS) cat_pos--;
+            else if (cat_pos < SCR_POS) cat_pos++;
+        } else {
+            printf("쫀떡이는 심심해서 캣타워 쪽으로 이동합니다.\n");
+            if (cat_pos > CAT_POS) cat_pos--;
+            else if (cat_pos < CAT_POS) cat_pos++;
+        }
+        break;
     case 2:
         printf("쫀떡이는 기분좋게 식빵을 굽고 있습니다.\n");
         break;
@@ -245,7 +263,6 @@ void mood_move(void) {
         else if (cat_pos < BWL_POS) cat_pos++;
         break;
     }
-
 }
 
 void check_behavior(void) {
