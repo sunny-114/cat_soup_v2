@@ -4,7 +4,7 @@
 #include <time.h> 
 #include <windows.h> 
 
-#define ROOM_WIDTH 10
+#define ROOM_WIDTH 14
 #define HME_POS 1 
 #define BWL_POS (ROOM_WIDTH - 2)
 
