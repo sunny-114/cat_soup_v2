@@ -176,21 +176,29 @@ void mood_move(void) {
         else if (cat_pos < BWL_POS) cat_pos++;
         break;
     }
+
+    if (cat_pos != HME_POS && prev_pos == HME_POS) {
+        resting_home = 0;
+    }
+    if (cat_pos == HME_POS && prev_pos != HME_POS) {
+        resting_home = 1;
+    }
 }
 
 // 행동
 void check_behavior(void) {
 
     if (cat_pos == HME_POS) {
-        if (resting_home == 0) {
+        if (resting_home == 1) {
             if (prev_pos != HME_POS) {
                 printf("쫀떡이는 집에서 쉬려고 합니다.\n");
-            } else {
+                resting_home = 2;
+            } else if (resting_home == 2) { 
                 if (mood < 3) {
                     int prev_mood = mood;
                     mood++;
                     printf("쫀떡이는 집에서 쉽니다.\n");
-                    printf("기분이 %d -> %d\n", prev_mood, mood);
+                    printf("한턴을 쉬어서 기분이 좋아집니다: %d -> %d\n", prev_mood, mood);
                 }
             }
         }
@@ -379,7 +387,6 @@ void product_CP(void) {
     printf("보유 CP: %d 포인트\n", CP);
      
 }
-
 
 // 상점 구매
 void shop_buy(void) {
