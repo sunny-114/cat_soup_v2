@@ -122,60 +122,102 @@ void print_status(void) {
     printf("==================================================\n");
 }
 
-// 1-3 상호작용
 void handle_interaction(void) {
     int input;
     int dice;
+    int option_count = 1; 
 
-    printf("어떤 상호작용을 하시겠습니까?   0. 아무것도 하지 않음  1. 긁어 주기\n>> ");
+    printf("어떤 상호작용을 하시겠습니까?\n");
+    printf("  0. 아무것도 하지 않음\n");
+    printf("  1. 긁어주기\n");
+
+    if (has_mouse_toy && has_laser_pointer) {
+        printf("  2. 장난감 쥐로 놀아주기\n");
+        printf("  3. 레이저 포인터로 놀아주기\n");
+        option_count = 3;
+    } else if (has_mouse_toy) {
+        printf("  2. 장난감 쥐로 놀아주기\n");
+        option_count = 2;
+    } else if (has_laser_pointer) {
+        printf("  2. 레이저 포인터로 놀아주기\n");
+        option_count = 2;
+    }
 
     while (1) {
+        printf(">> ");
         if (scanf_s("%d", &input) != 1) {
-            printf(">> ");
-
-            while (getchar() != '\n'); 
-            Sleep(500);
+            while (getchar() != '\n');
             continue;
         }
-
-        if (input == 0 || input == 1)
-            break; 
-        printf(">> ");
-        Sleep(500);
+        if (input >= 0 && input <= option_count) break;
     }
 
     dice = rand() % 6 + 1;
+    printf("주사위를 굴립니다. 또르륵... %d이(가) 나왔습니다!\n", dice);
 
-    if (input == 0) {
-        printf("아무것도 하지 않습니다.\n");
-        printf("4/6의 확률로 친밀도가 떨어집니다.\n");
-        printf("주사위를 굴립니다. 또르륵...\n");
-        printf("%d이(가) 나왔습니다!\n", dice);
+    int prev_mood = mood;
+    int prev_intimacy = intimacy;
 
-        if (dice <= 4) {
-            if (intimacy > 0) intimacy--;
-            printf("친밀도가 떨어집니다.\n");
-            printf("현재 친밀도: %d\n", intimacy);
-        }
-        else {
-            printf("다행히 친밀도가 떨어지지 않았습니다.\n");
-            printf("현재 친밀도: %d\n", intimacy);
+    if (input == 0) { 
+        if (mood > 0) mood--;
+        printf("쫀떡이의 기분이 나빠졌습니다: %d -> %d\n", prev_mood, mood);
+
+        if (dice <= 5 && intimacy > 0) {
+            intimacy--;
+            printf("집사와의 관계가 나빠집니다.\n");
         }
     }
-    else if (input == 1) {
-        printf("쫀떡이의 턱을 긁어주었습니다.\n");
-        printf("2/6의 확률로 친밀도가 높아집니다.\n");
-        printf("주사위를 굴립니다. 또르륵...\n");
-        printf("%d이(가) 나왔습니다!\n", dice);
-        if (dice >= 5) {
-            if (intimacy < 4) intimacy++;
-            printf("친밀도는 높아집니다.\n");
-            printf("현재 친밀도: %d\n", intimacy);
+    else if (input == 1) { 
+        printf("쫀떡이의 기분은 그대로입니다: %d\n", mood);
 
+        if (dice >= 5 && intimacy < 4) {
+            intimacy++;
         }
-        else {
-            printf("친밀도는 그대로입니다.\n");
-            printf("현재 친밀도: %d\n", intimacy);
+    }
+    else if (input == 2) {
+        if (has_mouse_toy && has_laser_pointer) {
+            printf("장난감 쥐로 쫀떡이와 놀아줬습니다.\n");
+            mood++;
+            if (mood > 3) mood = 3;
+            if (mood < 0) mood = 0;
+            printf("쫀떡이의 기분이 조금 좋아졌습니다: %d -> %d\n", prev_mood, mood);
+
+            if (dice >= 4 && intimacy < 4) {
+                intimacy++;
+            }
+        }
+        else if (has_mouse_toy) {
+            printf("장난감 쥐로 쫀떡이와 놀아줬습니다.\n");
+            mood++;
+            if (mood > 3) mood = 3;
+            if (mood < 0) mood = 0;
+            printf("쫀떡이의 기분이 조금 좋아졌습니다: %d -> %d\n", prev_mood, mood);
+
+            if (dice >= 4 && intimacy < 4) {
+                intimacy++;
+            }
+        }
+        else if (has_laser_pointer) {
+            printf("레이저 포인터로 쫀떡이와 신나게 놀아줬습니다.\n");
+            mood += 2;
+            if (mood > 3) mood = 3;
+            if (mood < 0) mood = 0;
+            printf("쫀떡이의 기분이 꽤 좋아졌습니다: %d -> %d\n", prev_mood, mood);
+
+            if (dice >= 2 && intimacy < 4) {
+                intimacy++;
+            }
+        }
+    }
+    else if (input == 3) { 
+        printf("레이저 포인터로 쫀떡이와 신나게 놀아줬습니다.\n");
+        mood += 2;
+        if (mood > 3) mood = 3;
+        if (mood < 0) mood = 0;
+        printf("쫀떡이의 기분이 꽤 좋아졌습니다: %d -> %d\n", prev_mood, mood);
+
+        if (dice >= 2 && intimacy < 4) {
+            intimacy++;
         }
     }
 }
