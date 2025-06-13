@@ -266,18 +266,42 @@ void mood_move(void) {
 }
 
 void check_behavior(void) {
+
     if (cat_pos == HME_POS) {
-        if(resting_home == 0) {
-            mood++;
-            if (mood > 3) mood = 3;
-            printf("쫀떡이는 집에서 편안하게 쉽니다. 기분이 좋아졌습니다.: %d\n", mood);
-            resting_home = 1;
+        if (resting_home == 0) {
+            if (prev_pos != HME_POS) {
+                printf("쫀떡이는 집에서 쉬려고 합니다.\n");
+            } else {
+                if (mood < 3) {
+                    int prev_mood = mood;
+                    mood++;
+                    printf("쫀떡이는 집에서 쉽니다.\n");
+                    printf("기분이 %d -> %d\n", prev_mood, mood);
+                }
+            }
         }
-    } else {
-        resting_home = 0;
     }
 
-    if (cat_pos == ROOM_WIDTH - 2) {
+    else if (has_scratcher && cat_pos == SCR_POS) {
+        printf("쫀떡이는 스크래처를 긁고 놀았습니다.\n");
+        if (mood < 3) {
+            int prev_mood = mood;
+            mood++;
+            printf("기분이 조금 좋아졌습니다: %d->%d\n", prev_mood, mood);
+        }
+    }
+
+    else if (has_cattower && cat_pos == CAT_POS) {
+        printf("쫀떡이는 캣타워를 뛰어다닙니다.\n");
+        if (mood < 3) {
+            int prev_mood = mood;
+            mood += 2;
+            if (mood > 3) mood = 3;
+            printf("기분이 제법 좋아졌습니다: %d->%d\n", prev_mood, mood);
+        }
+    }
+
+    else if (cat_pos == BWL_POS) {
         int type = rand() % 3;
         switch (type) {
         case 0:
@@ -290,11 +314,11 @@ void check_behavior(void) {
             printf("쫀떡이가 브로콜리 수프를 만들었습니다!\n");
             break;
         }
-
         soup_count++;
         printf("현재까지 만든 수프: %d개\n", soup_count);
     }
 }
+
 
 void product_CP(void) {
     int get_CP = (mood - 1 >= 0 ? mood -1 : 0) + intimacy;
