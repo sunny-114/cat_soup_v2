@@ -51,7 +51,7 @@ int main(void) {
 
         print_status(); // 상태 출력
         Sleep(500);
-        feeling_bad(); // 기분 나빠짐짐
+        feeling_bad(); // 기분 나빠짐
         Sleep(500);
         mood_move(); // 이동
         Sleep(500); 
@@ -59,7 +59,7 @@ int main(void) {
         Sleep(500);
         draw_room(); // 방 그리기
         Sleep(500);
-        handle_interaction(); // 상호작용 & 결과과
+        handle_interaction(); // 상호작용 & 결과
         Sleep(500);
         product_CP(); // CP 생산
         Sleep(500);
