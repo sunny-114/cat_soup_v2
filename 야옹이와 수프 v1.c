@@ -12,18 +12,16 @@ int soup_count = 0;
 int intimacy = 2;
 int cat_pos = ROOM_WIDTH / 2;
 int prev_pos = ROOM_WIDTH / 2;
-
 int CP = 0;
 int mood = 3;
 int resting_home = 0;
-
 int has_scratcher = 0;
 int has_cattower = 0;
 int has_mouse_toy = 0;
 int has_laser_pointer = 0;
-
 int SCR_POS = -1;
 int CAT_POS = -1;
+int turn_count = 0;
 
 void print_status(void); // 1-2 상태 출력
 void handle_interaction(void); // 1-3 상호작용
@@ -33,6 +31,7 @@ void mood_move(void); // 2-3 이동
 void check_behavior(void); // 2-4 행동
 void product_CP(void); // 2-7 CP 생산
 void shop_buy (void); // 2-8 상점
+void surprise_quest(void); // 돌발퀘스트
 
 int main(void) {
     // 랜덤 값 초기화 (실행할 때마다 다른 랜덤값)
@@ -51,6 +50,8 @@ int main(void) {
 
     // 게임 메인 루프 ( 1-2 ~ 1-6 )
     while (keep_going) {
+        turn_count++;
+
         print_status(); // 1-2 상태 출력
         Sleep(500);
         feeling_bad();
@@ -59,13 +60,18 @@ int main(void) {
         Sleep(500); // 2-3 이동
         check_behavior(); // 2-4 행동
         Sleep(500);
-        handle_interaction(); // 1-3 상호작용
-        Sleep(500);
         draw_room(); // 1-4 방 그리기
+        Sleep(500);
+        handle_interaction(); // 1-3 상호작용
         Sleep(500);
         product_CP(); // 2-7 CP생산
         Sleep(500);
         shop_buy(); // 2-8 상점점
+        Sleep(500);
+
+        if (turn_count == 3) {
+            surprise_quest();
+        }
         Sleep(2500); 
         system("cls");
     }
@@ -413,4 +419,24 @@ void shop_buy(void) {
         }
 
     } 
+}
+
+void surprise_quest(void) {
+    int target = rand() % 6 + 1;
+    int roll, count = 0;
+
+    printf("돌발퀘스트 발생! %d가 나올 때까지 주사위를 굴리세요.\n", target);
+    printf("엔터 키를 누르면 주사위를 굴립니다.\n");
+
+    do {
+        printf(">> ");
+        (void)getchar();  // 엔터 키 입력 대기
+
+        roll = rand() % 6 + 1;
+        count++;
+        printf("굴린 결과: %d\n", roll);
+
+    } while (roll != target);
+
+    printf("%d번 만에 %d가 나왔습니다! 돌발퀘스트 완료!\n", count, target);
 }
